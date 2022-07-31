@@ -1,28 +1,30 @@
-opt = document.querySelector("#valores");
+let opt = document.querySelector("#valores");
+let h1 = document.querySelector("#prueba");
 inputValor = document.querySelector("#txtIngreso");
 const urlAPI = "https://mindicador.cl/api";
 const arr = [];
-let arr2 = []
+let arr2 = [];
 
 const getMonedas = async () => {
   try {
     const res = await fetch(urlAPI);
     const monedas = await res.json();
-    console.log("monedas desde getMonedas");
-    console.log(monedas);
     return monedas;
   } catch (error) {
     console.log(error);
   }
 };
 
-const template = () => {};
+const template = (moneda) => {
+  return (html = /*html*/ `
+  <option value=${moneda.valor}>${moneda.codigo}</option>
+  `);
+};
 
 const filtrarDato = async () => {
   try {
     const monedas = await getMonedas();
-    console.log("monedas desde filtroDatos");
-    console.log(monedas);
+
     for (let moneda in monedas) {
       arr.push({
         codigo: monedas[moneda].codigo,
@@ -32,21 +34,25 @@ const filtrarDato = async () => {
         valor: monedas[moneda].valor,
       });
     }
-    arr2 = arr.filter(x => x.codigo != undefined)
-
-    console.log("arr desde FiltrarDatos");
-    console.log(arr2);
+    return (arr2 = arr.filter((x) => x.codigo != undefined));
   } catch (error) {
     console.log(error);
   }
 };
 
-const renderMonedas = () => {};
+const renderMonedas = async () => {
+  try {
+    let filtro = await filtrarDato();
+    console.log(filtro);
+    let html = "";
+    filtro.forEach((f) => {
+      html += template(f);
+    });
+    opt.innerHTML = html;
+    h1.innerHTML = "HOla mundo";
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-getMonedas();
-filtrarDato();
-console.log("arr desde Fuera de todo");
-console.log(arr);
-console.log("arr2 desde Fuera de todo");
-console.log(arr2);
-
+renderMonedas();
