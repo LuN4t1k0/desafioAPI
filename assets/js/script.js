@@ -1,6 +1,8 @@
 let opt = document.querySelector("#valores");
-let h1 = document.querySelector("#prueba");
-inputValor = document.querySelector("#txtIngreso");
+let txt = document.querySelector("#txtIngreso")
+let result = document.querySelector("#resultado")
+let btn = document.querySelector("#btn")
+
 const urlAPI = "https://mindicador.cl/api";
 const arr = [];
 let arr2 = [];
@@ -16,6 +18,16 @@ const getMonedas = async () => {
   }
 };
 
+const getMonedasParaGrafico =  async(indicador) => {
+  try {
+  const res = await fetch(`https://mindicador.cl/api/${indicador}`)
+  const monedasGrafico = await res.json()
+ 
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 const template = (moneda) => {
   return (html = /*html*/ `
   <option value=${moneda.valor}>${moneda.codigo}</option>
@@ -25,7 +37,7 @@ const template = (moneda) => {
 const filtrarDato = async () => {
   try {
     const monedas = await getMonedas();
-
+    
     for (let moneda in monedas) {
       arr.push({
         codigo: monedas[moneda].codigo,
@@ -52,10 +64,27 @@ const renderMonedas = async () => {
       html += template(f);
     });
     opt.innerHTML = html;
-    h1.innerHTML = "HOla mundo";
   } catch (error) {
     console.log(error);
   }
 };
 
+
+const calculdarValor = () => {
+  let unidad = opt.value
+  let monedaLocal = txt.value
+  let resultado = monedaLocal * unidad
+  result.innerHTML = Math.round(resultado)
+  let txtResultado = opt.options[opt.selectedIndex].text
+  console.log("desde CalcularValor");
+  console.log(txtResultado);
+  
+  return consultaApi = getMonedasParaGrafico(txtResultado)
+  
+}
+
+
 renderMonedas();
+
+
+btn.addEventListener('click', calculdarValor)
