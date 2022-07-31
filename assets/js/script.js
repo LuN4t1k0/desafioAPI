@@ -4,6 +4,7 @@ inputValor = document.querySelector("#txtIngreso");
 const urlAPI = "https://mindicador.cl/api";
 const arr = [];
 let arr2 = [];
+let filtroDelFiltro = []
 
 const getMonedas = async () => {
   try {
@@ -34,7 +35,9 @@ const filtrarDato = async () => {
         valor: monedas[moneda].valor,
       });
     }
-    return (arr2 = arr.filter((x) => x.codigo != undefined));
+    arr2 = arr.filter((x) => x.codigo != undefined);
+    filtroDelFiltro = arr2.filter(x => x.unidad_medida != "Porcentaje")
+    return filtroDelFiltro
   } catch (error) {
     console.log(error);
   }
