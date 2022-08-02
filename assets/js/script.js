@@ -8,10 +8,6 @@ const arr = [];
 let arr2 = [];
 let filtroDelFiltro = [];
 
-/**
- * Obtiene los datos de la API, los convierte a JSON y devuelve los datos
- * @returns the monedas variable.
- */
 const getMonedas = async () => {
   try {
     const res = await fetch(urlAPI);
@@ -22,36 +18,12 @@ const getMonedas = async () => {
   }
 };
 
-/**
- * Obtiene datos de la API mindicador.cl y luego registra los datos en la consola
- * @param indicador - El nombre del indicador para el que desea obtener datos.
- */
-const getMonedasParaGrafico = async (indicador) => {
-  try {
-    const res = await fetch(`https://mindicador.cl/api/${indicador}`);
-    const monedasGrafico = await res.json();
-    console.log(monedasGrafico);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-/**
- * Toma un objeto moneda como argumento y devuelve una cadena de HTML que contiene un elemento de
- * opción con el valor y contenido de texto del objeto moneda
- * @param moneda - Este es el objeto que contiene los datos que queremos usar en la plantilla.
- * @returns Se devuelve la función de plantilla.
- */
 const template = (moneda) => {
   return (html = /*html*/ `
   <option value=${moneda.valor}>${moneda.codigo}</option>
   `);
 };
 
-/**
- * Filtra los datos de la API y devuelve una matriz de objetos con los datos filtrados.
- * @returns Una matriz de objetos.
- */
 const filtrarDato = async () => {
   try {
     const monedas = await getMonedas();
@@ -69,15 +41,12 @@ const filtrarDato = async () => {
     filtroDelFiltro = arr2.filter((x) => x.unidad_medida != "Porcentaje");
     
     return filtroDelFiltro;
-  
+
   } catch (error) {
     console.log(error);
   }
 };
 
-/**
- * Toma los datos de la API, los filtra y luego los presenta al DOM
- */
 const renderMonedas = async () => {
   try {
     let filtro = await filtrarDato();
@@ -92,26 +61,29 @@ const renderMonedas = async () => {
   }
 };
 
-
-/**
- * Toma el valor de la opción seleccionada en el menú desplegable, lo multiplica por el valor del campo
- * de entrada y muestra el resultado en el elemento de párrafo
- */
-const calcular = () => {
-  let unidad = opt.value;
-  let monedaLocal = txt.value;
-  let resultado = monedaLocal * unidad;
-  result.innerHTML = Math.round(resultado);
+const getMonedasParaGrafico = async (indicador) => {
+  try {
+    const res = await fetch(`https://mindicador.cl/api/${indicador}`);
+    const monedasGrafico = await res.json();
+    console.log(monedasGrafico);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-
-const graficar = async() => {
-
-}
+// const calcular = () => {
+//   let unidad = opt.value;
+//   let monedaLocal = txt.value;
+//   let resultado = monedaLocal * unidad;
+//   result.innerHTML = Math.round(resultado);
+// };
 
 const calculdarValor = async () => {
   try {
-
+    let unidad = opt.value;
+    let monedaLocal = txt.value;
+    let resultado = monedaLocal * unidad;
+    result.innerHTML = Math.round(resultado);
     let txtResultado = opt.options[opt.selectedIndex].text;
 
     let consultaApi = await getMonedasParaGrafico(txtResultado);
@@ -122,8 +94,11 @@ const calculdarValor = async () => {
   }
 };
 
-
+// const prueba = async () => {
+//   let graficar = await getMonedasParaGrafico();
+//   console.log(graficar);
+// };
 
 renderMonedas();
 
-btn.addEventListener("click", calcular);
+btn.addEventListener("click", calculdarValor);
