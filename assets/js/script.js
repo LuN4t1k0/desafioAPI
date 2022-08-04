@@ -1,104 +1,156 @@
-let opt = document.querySelector("#valores");
-let txt = document.querySelector("#txtIngreso");
-let result = document.querySelector("#resultado");
-let btn = document.querySelector("#btn");
-
-const urlAPI = "https://mindicador.cl/api";
+/* Declaración de variables. */
+let opt = document.querySelector("#monedas");
+let txt = document.querySelector("#txtMonedaLocal");
+let result = document.querySelector("#txtResult");
+let btn = document.querySelector("#calcular");
+const ctx = document.getElementById("myChart");
+let myChart 
+const urlApi = "https://mindicador.cl/api";
 const arr = [];
-let arr2 = [];
-let filtroDelFiltro = [];
+let filterArr = [];
 
-const getMonedas = async () => {
+/**
+ * Obtiene datos de la API y los devuelve en formato JSON
+ * @returns el objeto de las monedas.
+ */
+const fetchData = async () => {
   try {
-    const res = await fetch(urlAPI);
-    const monedas = await res.json();
-    return monedas;
+    const res = await fetch(urlApi);
+    const coins = await res.json();
+    return coins;
   } catch (error) {
-    console.log(error);
+    console.err(error);
   }
 };
 
-const template = (moneda) => {
-  return (html = /*html*/ `
-  <option value=${moneda.valor}>${moneda.codigo}</option>
-  `);
-};
-
-const filtrarDato = async () => {
+/**
+ * Obtiene datos de una API, los filtra y devuelve los datos filtrados
+ * @returns Una matriz de objetos.
+ */
+const filterData = async () => {
   try {
-    const monedas = await getMonedas();
-
-    for (let moneda in monedas) {
-      arr.push({
-        codigo: monedas[moneda].codigo,
-        nombre: monedas[moneda].nombre,
-        unidad_medida: monedas[moneda].unidad_medida,
-        fecha: monedas[moneda].fecha,
-        valor: monedas[moneda].valor,
-      });
+    const coins = await fetchData();
+    for (const coin in coins) {
+      arr.push(coins[coin]);
     }
-    arr2 = arr.filter((x) => x.codigo != undefined);
-    filtroDelFiltro = arr2.filter((x) => x.unidad_medida != "Porcentaje");
-    
-    return filtroDelFiltro;
-
+    filterArr = arr.filter(
+      (x) => x.codigo != undefined && x.unidad_medida != "Porcentaje"
+    );
+    return filterArr;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
-const renderMonedas = async () => {
+/**
+ * Toma un objeto como argumento y devuelve una cadena de HTML
+ * @param coins - El objeto que contiene los datos que se usarán para llenar la plantilla.
+ * @returns Se devuelve la función de plantilla.
+ */
+const template = (coins) => {
+  return /*html*/ `
+  <option value=${coins.valor}>${coins.codigo}</option>`;
+};
+
+/**
+ * Toma los datos de la API, los filtra y luego los presenta al DOM
+ */
+const coinsRender = async () => {
   try {
-    let filtro = await filtrarDato();
-    console.log(filtro);
+    let filter = await filterData();
     let html = "";
-    filtro.forEach((f) => {
-      html += template(f);
+    filter.forEach((x) => {
+      html += template(x);
     });
     opt.innerHTML = html;
+    // console.log(filter);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
-const getMonedasParaGrafico = async (indicador) => {
+/**
+ * Toma el valor de la moneda seleccionada en el menú desplegable, lo multiplica por el valor del campo
+ * de entrada y luego muestra el resultado en el resultado div
+ */
+const convertCurrencies = () => {
+  let currency = opt.value;
+  let localCurrency = txt.value;
+  let total = localCurrency * currency;
+  let clp = new Intl.NumberFormat("es-CL", {
+    currency: "CLP",
+    style: "currency",
+  }).format(total);
+  result.innerHTML = `CLP ${clp}`;
+  // console.log(clp);
+};
+
+/**
+ * Obtiene datos de la API y los devuelve en formato JSON
+ * @param indicator - El indicador para el que desea obtener datos.
+ * @returns los datos de la API.
+ */
+const fetchDataForGraphic = async (indicator) => {
   try {
-    const res = await fetch(`https://mindicador.cl/api/${indicador}`);
-    const monedasGrafico = await res.json();
-    console.log(monedasGrafico);
+    const res = await fetch(`${urlApi}/${indicator}`);
+    const currecie = await res.json();
+    // console.log(currecie);
+    return currecie;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
-// const calcular = () => {
-//   let unidad = opt.value;
-//   let monedaLocal = txt.value;
-//   let resultado = monedaLocal * unidad;
-//   result.innerHTML = Math.round(resultado);
-// };
+/**
+ * Toma un objeto de moneda y devuelve un objeto de configuración para un gráfico
+ * @param currencie - El objeto que contiene los datos que se van a mostrar.
+ * @returns un objeto con las propiedades type, responsive, data y datasets.
+ */
+const prepareDataAndConfigurations = (currencie) => {
+  const type = "line";
+  const title = currencie.nombre;
+  const border = "rgba(255, 99, 132, 1)";
+  const date = currencie.serie.map((x) => x.fecha.slice(0, 10));
+  const data = currencie.serie.map((x) => x.valor);
 
-const calculdarValor = async () => {
-  try {
-    let unidad = opt.value;
-    let monedaLocal = txt.value;
-    let resultado = monedaLocal * unidad;
-    result.innerHTML = Math.round(resultado);
-    let txtResultado = opt.options[opt.selectedIndex].text;
-
-    let consultaApi = await getMonedasParaGrafico(txtResultado);
-
-    return consultaApi;
-  } catch (error) {
-    console.log(error);
-  }
+  const config = {
+    type: type,
+    responsive: true,
+    data: {
+      labels: date.reverse(),
+      datasets: [
+        {
+          label: `Historico Mensual ${title}`,
+          borderColor: border,
+          backgroundColor: border,
+          data: data.reverse(),
+        },
+      ],
+    },
+  };
+  return config;
 };
 
-// const prueba = async () => {
-//   let graficar = await getMonedasParaGrafico();
-//   console.log(graficar);
-// };
 
-renderMonedas();
+/**
+ * Obtiene los datos de la API, prepara los datos y las configuraciones para el gráfico y luego
+ * representa el gráfico
+ */
+const graphicRender = async () => {
+  
+  const parameter2 = opt.options[opt.selectedIndex].text; 
+  const indicador = await fetchDataForGraphic(parameter2);
+  console.log(indicador);
+  const config = prepareDataAndConfigurations(indicador)
+  console.log(config);
+  
+  if(myChart){
+    myChart.destroy()
+  }
+  myChart = new Chart(ctx, config);
+  
+}
 
-btn.addEventListener("click", calculdarValor);
+coinsRender();
+btn.addEventListener("click", convertCurrencies);
+opt.addEventListener('change',graphicRender)
