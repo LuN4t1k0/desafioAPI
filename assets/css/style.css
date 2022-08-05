@@ -1,22 +1,87 @@
-* {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+body{
+  background-color: #B93160;
 }
-
-
-.chartCard {
+.container {
+  height: 100vh;
   width: 100vw;
-  height: calc(100vh - 40px);
-  background: rgba(255, 167, 26, 0.2);
-  display: flex;
-  align-items: center;
+  /* background-color: rgba(255, 26, 104, 1); */
+  background-color: #D75281;
+  display: flex; 
+  flex-direction: column;
   justify-content: center;
+ }
+
+ .inputs{
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+ }
+
+.form-control{
+  margin-top: 10px;
+  width: 400px;
+  margin-bottom: 5px;
 }
-.chartBox {
-  width: 700px;
+
+.form-select{
+  margin-bottom: 10px;
+  
+}
+.right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
+
+.center{
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: white;
+}
+.left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 50px;
+  background-color: aqua;
+}
+
+canvas{
+  width: 100%;
   padding: 20px;
   border-radius: 20px;
-  border: solid 3px rgba(255, 26, 104, 1);
+  /* border: solid 3px rgba(255, 26, 104, 1); */
+  border: solid 3px #D75281;;
   background: white;
+  display: flex;
+  
+}
+
+button{
+  height: 85%;
+}
+
+.btn-secondary {
+  background-color: #EED180;
+  border: 1px solid #FFF89C;
+
+}
+.btn:hover {
+  background-color:  #EED180;;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+}
+.titulo {
+  color: white;
+
 }

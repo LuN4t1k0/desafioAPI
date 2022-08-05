@@ -4,24 +4,90 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
   <link rel="stylesheet" href="/assets/css/style.css">
   <title>Desafio Api 3.0</title>
 </head>
 <body>
-  <div class="chartCard">
-    <div class="">
-      <input id="txtMonedaLocal" type="text">
-      <select name="" id="monedas">
+  <section class="container">
+    <div class="title">
+      <img src="/assets/img/coin.png" alt="" height="40px">
+      <h1 class="titulo" >CONVERSOR DE DIVISAS</h1>
+    </div>
+    <div class="inputs">
+      <div class="left">
+        <input id="txtMonedaLocal" type="text" class="form-control" id="exampleFormControlInput1"
+        placeholder="ingresa la antidad a convertir">
+        <div class="form-floating ">
 
-      </select>
-      <button id="calcular">Calcular</button>
+          <select class="form-select" id="monedas" aria-label="Floating label select example">
+          </select>
+          <label for="monedas">Selecciona la divisa a convertir</label>
+        </div>
+      </div>
+      <div class="right">
+        <button id="calcular" class="btn btn-secondary ">Convertir</button>
+      </div>
+
+
+      
+    </div>
+
+    <div class="center">
       <h2 id="txtResult"></h2>
     </div>
-    <div class="chartBox">
+    <div class="graphic">
       <canvas id="myChart"></canvas>
     </div>
-  </div>
+  </section>
+
+
+  <!-- 
+    <div class="imputs">
+
+      <div class="left">
+
+        <input id="txtMonedaLocal" type="text" class="form-control" id="exampleFormControlInput1"
+          placeholder="ingresa la antidad a convertir">
+        <div class="form-floating ">
+
+          <select class="form-select" id="monedas" aria-label="Floating label select example">
+          </select>
+          <label for="monedas">Selecciona la divisa a convertir</label>
+        </div>
+      </div>
+
+      <div class="boton">
+        <button id="calcular" class="btn btn-secondary ">Convertir</button>
+      </div>
+
+
+    </div>
+    </div>
+
+    <div class="center">
+      <h2 id="txtResult"></h2>
+    </div>
+    <div class="righ">
+
+    </div>
+    <div class="graphic">
+      <canvas id="myChart"></canvas>
+    </div>
+  </section> -->
+
+
+
+
+
+  
   <script src="/assets/js/script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+    crossorigin="anonymous"></script>
 </body>
 </html>

@@ -153,4 +153,5 @@ const graphicRender = async () => {
 
 coinsRender();
 btn.addEventListener("click", convertCurrencies);
-opt.addEventListener('change',graphicRender)
+opt.addEventListener('change',graphicRender, convertCurrencies)
+
